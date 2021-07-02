@@ -1,3 +1,4 @@
+# importing the required Libraries
 import logging
 import time
 from kiteconnect import KiteTicker
@@ -8,7 +9,7 @@ from token_store import token_key
 #from .token_store import token_key
 # from .consumers import tokens
 
-
+#we store the firebase credentials here 
 config = {
     "apiKey": "AIzaSyCU9JP2yixeKjw3NE30Pb0I0D0UQjV94gA",
     "authDomain": "kiteconnect-stock.firebaseapp.com",
@@ -19,6 +20,7 @@ config = {
     "appId": "1:981866107803:web:568ffc6b464656a6f4c73e",
     "measurementId": "G-9BRWTZYS5C"
 }
+#Intialising the firebase with the specified credentials
 
 firebase = pyrebase.initialize_app(config)
 authe = firebase.auth()
@@ -26,6 +28,7 @@ database = firebase.database()
 
 logging.basicConfig(level=logging.DEBUG)
 # api_key = open('/home/akkey/Desktop/Django-projects/django-sockets/demo1/integers/api_key.txt', 'r').read()
+# Geting the API access token 
 api_key = "0yvny102khsjlnpr"
 access_token = str(database.child("access_token").get().val())
 # access_token = "8ifxAU8Ah8bxoNoMsWgiUbDU88OTJUY8"
