@@ -7,3 +7,4 @@ services:
     volumes:
     - ./app:/app
     command: sh -c "python3 streaming.py"
+    restart: on-failure
