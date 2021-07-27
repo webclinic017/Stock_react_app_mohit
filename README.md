@@ -3,15 +3,11 @@
 
 ## Please follow the below steps regarding deployment for the same
 
-## `Requirements installation`
-
-- Step 1 : Git clone the branch 
-- Step 2 : Open the cloned brach on any terminal of the choice
-- Step 3 : Type pip install -r requirements.txt to install all the required librabies
-
-## `Running the server`
-
-- Step 4 : Type python manage.py runserver to run the django server
-
+Step 1 : Install the docker and Docker compose on your pc please refer the link to download the same
+url : https://www.docker.com/products/docker-desktop
+- Step 2 : Git Clone the repo of the specfied Branch i.e master for strating the stock API
+- Step 3 : Open the git cloned folder in Command prompt/terminal
+## docker-compose up --build
+Step 4 : Once in the terminal just type docker-compose up --build and API's will start
 ### All the Branches work in Sync from to fetch and push the data respectively
 
