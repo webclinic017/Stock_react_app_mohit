@@ -4,7 +4,7 @@
 
 ### cd into the folder 
 
-## run the below command 
+## run the below command via opening the terminal
 
 ## `docker-compose up --build`
 
