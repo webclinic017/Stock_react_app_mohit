@@ -10,6 +10,6 @@
 
 ## Step2:  on the new terminal of the same folder type the below command
 
-##  `docker exec react npm install npm install -g sass`
+##  `docker exec react npm install -g sass`
 
 ## Step3:  Stop the container using crtl + C and restart the docker-compose using `docker-compose up` only
