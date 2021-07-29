@@ -1,0 +1,18 @@
+version: "3.8"
+
+services: 
+    app:
+        build: 
+            context: .
+        environment:
+                - NODE_ENV=production
+        volumes: 
+            - .:/app
+        ports: 
+            - 3000:3000
+        image: app:react
+        container_name: react
+        command: npm start
+        stdin_open: true
+        restart: always
+    
