@@ -12,4 +12,4 @@
 
 ##  `docker exec react npm install -g sass`
 
-## Step3:  Stop the container using crtl + C and restart the docker-compose using `docker-compose up` only
+## Step3:  Stop the container using crtl + C and restart the docker-compose using `docker-compose up` command only
