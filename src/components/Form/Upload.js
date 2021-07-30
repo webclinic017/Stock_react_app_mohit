@@ -42,7 +42,7 @@ import {
   // MuiThemeProvider,
   ThemeProvider,
 } from "@material-ui/core";
-import axios from 'axios';
+import axios from "axios";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import Clock from "react-digital-clock";
@@ -54,6 +54,8 @@ import { lighten } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import classes3 from "../../app.scss";
 import sample from "../Form/SampleUpload.xlsx";
+
+const base_url = localStorage.getItem("base_url");
 
 const useStyles = (theme) => ({
   root: {
@@ -232,23 +234,13 @@ class ExcelPage extends Component {
         },
       ],
     };
-
-
-
-
-
-
   }
 
   handleCallback = (childData) => {
-
     this.setState({ data: childData });
-
   };
 
-
   handleCallback2 = (childData) => {
-
     this.setState({ data2: "DELETE" });
     // this.setState({ data: "YES" });
     // console.log(childData);
@@ -258,14 +250,13 @@ class ExcelPage extends Component {
       // console.log("dgdfgt");
       this.setState({ open: true });
     }
-
   };
 
   handleUploaderChange = (info) => {
     let fileList = [...info.fileList];
     // fileList = fileList.slice(-2);
     // 2. Read from response and show file link
-    fileList = fileList.map(file => {
+    fileList = fileList.map((file) => {
       if (file.response) {
         // Component will show file.url as link
         file.url = file.response.url;
@@ -274,13 +265,11 @@ class ExcelPage extends Component {
       return file;
     });
 
-
     // this.setState({ FileList:info.fileList });
     // console.log(999,FileList);
     this.setState({ fileList });
     // console.log(999, fileList);
   };
-
 
   fileHandler = (FileList) => {
     this.setState({ btn: "yes" });
@@ -291,22 +280,27 @@ class ExcelPage extends Component {
     // console.log("fileListHere", FileList);
 
     var FormDatas = new FormData();
-    FormDatas.append('file', FileList);
-    FormDatas.append('portfolio_name', this.state.name);
+    FormDatas.append("file", FileList);
+    FormDatas.append("portfolio_name", this.state.name);
 
     // console.log(this.state.name);
     axios({
       method: "post",
-      url: "https://sabertoothdashboard.herokuapp.com/dashboard/upload_err/",
+      url: base_url + "dashboard/upload_err/",
+      // url: "https://sabertoothdashboard.herokuapp.com/dashboard/upload_err/",
       data: FormDatas,
-      headers: { "Content-Type": "multipart/form-data", "Authorization": `token ${localStorage.getItem("token")}` }
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `token ${localStorage.getItem("token")}`,
+      },
     })
       .then(function (response) {
-        console.log("testing________:",response.data);
+        console.log("testing________:", response.data);
         localStorage.setItem("table_error", response.data);
         // console.log("ASDASD:", response.data);
         self.setState({ resp: response.data });
-      }).catch(function (error) {
+      })
+      .catch(function (error) {
         console.log("error:", error);
 
         // console.log("errosr:", error.response.data);
@@ -317,16 +311,10 @@ class ExcelPage extends Component {
         //     : console.log("error");
       });
 
-
-
-
-
-
-
     // console.log(this.state.FileList);
     // var bodyFormData = new FormData();
 
-    // bodyFormData.append('file', FileList); 
+    // bodyFormData.append('file', FileList);
 
     // axios({
     //   method: "post",
@@ -346,9 +334,6 @@ class ExcelPage extends Component {
     //       : console.log("error");
     //   });
 
-
-
-
     let fileObj = FileList;
     if (!fileObj) {
       this.setState({
@@ -361,7 +346,7 @@ class ExcelPage extends Component {
       !(
         fileObj.type === "application/vnd.ms-excel" ||
         fileObj.type ===
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       )
     ) {
       this.setState({
@@ -378,7 +363,6 @@ class ExcelPage extends Component {
       // let reach = 0;
       // console.log("error_test:", resp);
 
-
       if (err) {
         console.log(err);
       } else {
@@ -387,7 +371,6 @@ class ExcelPage extends Component {
         resp.rows.slice(1).map((row, index) => {
           if (row && row !== "undefined") {
             if (row[0] && row[2]) {
-
               // let fg = ((row[0]).toString()).split(/\s/).join('')
               // if (dt.includes(fg)) {
               //   console.log("error in excel data");
@@ -405,7 +388,6 @@ class ExcelPage extends Component {
               //   }
               // })
               // console.log("now_test:",row[0]);
-
             } else {
               if (!row[0] && !row[2]) {
                 // console.log("heree");
@@ -552,13 +534,13 @@ class ExcelPage extends Component {
       highlight:
         theme.palette.type === "light"
           ? {
-            color: theme.palette.secondary.main,
-            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-          }
+              color: theme.palette.secondary.main,
+              backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+            }
           : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.dark,
-          },
+              color: theme.palette.text.primary,
+              backgroundColor: theme.palette.secondary.dark,
+            },
       title: {
         flex: "1 1 100%",
       },
@@ -602,46 +584,39 @@ class ExcelPage extends Component {
       // console.log("error_test:", resp);
       if (resp === undefined) {
         console.log("something went wrong");
-      }
-      else if (resp === null) {
+      } else if (resp === null) {
         console.log("something went wrong");
-      }
-      else {
+      } else {
         for (var i = 0; i < resp.length; i++) {
-
           if (reach === 1) {
-            if (resp[i] === '[') {
+            if (resp[i] === "[") {
               if (x !== "") {
-                x = x.replace(/'/g, '');
+                x = x.replace(/'/g, "");
                 array.push(x);
               }
               x = "";
-            }
-            else if (resp[i] === ',') {
+            } else if (resp[i] === ",") {
               if (x !== "") {
-                x = x.replace(/'/g, '');
+                x = x.replace(/'/g, "");
                 array.push(x);
               }
               x = "";
-            }
-            else if (resp[i] === ']') {
+            } else if (resp[i] === "]") {
               if (x !== "") {
-                x = x.replace(/'/g, '');
+                x = x.replace(/'/g, "");
                 array.push(x);
               }
               x = "";
-            }
-            else {
-              if (resp[i] !== ':') {
+            } else {
+              if (resp[i] !== ":") {
                 x = x + resp[i];
               }
             }
           }
 
-          if (resp[i] === '|') {
+          if (resp[i] === "|") {
             reach = 1;
           }
-
         }
       }
       // console.log("error here:" + error);
@@ -726,33 +701,28 @@ class ExcelPage extends Component {
       let reach = 0;
       if (respp === undefined) {
         console.log("something went wrong");
-      }
-      else if (respp === null) {
+      } else if (respp === null) {
         console.log("something went wrong");
-      }
-      else {
+      } else {
         for (var i = 0; i < respp.length; i++) {
-
           if (reach === 1) {
-            if (respp[i] === '[') {
+            if (respp[i] === "[") {
               if (x !== "") {
-                x = x.replace(/'/g, '');
+                x = x.replace(/'/g, "");
                 array.push(x);
                 // this.setState({ arraydata: [...this.state.arraydata, x] })
               }
               x = "";
-            }
-            else if (respp[i] === ',') {
+            } else if (respp[i] === ",") {
               if (x !== "") {
-                x = x.replace(/'/g, '');
+                x = x.replace(/'/g, "");
                 array.push(x);
                 // this.setState({ arraydata: [...this.state.arraydata, x] })
               }
               x = "";
-            }
-            else if (respp[i] === ']') {
+            } else if (respp[i] === "]") {
               if (x !== "") {
-                x = x.replace(/'/g, '');
+                x = x.replace(/'/g, "");
                 array.push(x);
                 // this.setState({ arraydata: [...this.state.arraydata, x] })
               }
@@ -772,38 +742,40 @@ class ExcelPage extends Component {
             //   }
             //   x = "";
             // }
-
             else {
-              if (respp[i] !== ':') {
+              if (respp[i] !== ":") {
                 x = x + respp[i];
               }
             }
           }
 
-          if (respp[i] === '|') {
+          if (respp[i] === "|") {
             reach = 1;
           }
-
         }
       }
       // console.log("testinggggggggggg:", this.state.rows);
-      let dt = []
+      let dt = [];
       array.map((r) => {
-        let dtt = (r.replace('(Invalid Tranding Symbol)', '').replace('(Invalid Quantity)', '').replace(' ', '')).toString()
-        dt.push(dtt.split(/\s/).join(''))
-      })
+        let dtt = r
+          .replace("(Invalid Tranding Symbol)", "")
+          .replace("(Invalid Quantity)", "")
+          .replace(" ", "")
+          .toString();
+        dt.push(dtt.split(/\s/).join(""));
+      });
       // console.log("error in excel dataasdasd:", dt);
 
       {
         this.state.rows.map((row, index) => {
-          if (dt.includes(((row.name).toString()).split(/\s/).join(''))) {
+          if (dt.includes(row.name.toString().split(/\s/).join(""))) {
             console.log("error in excel data", row.name, index);
-            this.state.rows.splice(index)
-            return null
+            this.state.rows.splice(index);
+            return null;
           } else {
-            console.log("correct data",row.name);
+            console.log("correct data", row.name);
           }
-        })
+        });
       }
 
       console.log("TESTING");
@@ -817,7 +789,6 @@ class ExcelPage extends Component {
       // let fg = ((row[0]).toString()).split(/\s/).join('')
 
       if (data === "YES") {
-
         return (
           <div>
             <Container
@@ -834,7 +805,7 @@ class ExcelPage extends Component {
                   paddingTop: "25px",
                   paddingBottom: "70px",
                 }}
-              //  className={classes.root}
+                //  className={classes.root}
               >
                 <div>
                   {returnerror(
@@ -846,7 +817,7 @@ class ExcelPage extends Component {
                 </div>
                 <Paper
                   className={classes.paper}
-                // style={{ width: "100%" }}
+                  // style={{ width: "100%" }}
                 >
                   <EnhancedTableToolbar />
                   <TableContainer
@@ -867,10 +838,7 @@ class ExcelPage extends Component {
                         rowCount={this.state.rows.length}
                       />
                       <TableBody>
-
                         {this.state.rows.map((row, index) => {
-
-
                           return (
                             <TableRow
                               hover
@@ -923,10 +891,11 @@ class ExcelPage extends Component {
                               </TableCell>
                             </TableRow>
                           );
-                          {/* </> */ }
+                          {
+                            /* </> */
+                          }
                           // )}
                         })}
-
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -935,15 +904,12 @@ class ExcelPage extends Component {
               </div>
             </Container>
           </div>
-        )
+        );
         // })}
       } else {
         return <div></div>;
       }
     };
-
-
-
 
     const checkfordissaperingform = (data) => {
       if (data === "NO") {
@@ -963,7 +929,7 @@ class ExcelPage extends Component {
                   paddingTop: "65px",
                   paddingBottom: "25px",
                 }}
-              // className={classes.root}
+                // className={classes.root}
               >
                 <Typography
                   className={classes.title}
@@ -1020,7 +986,7 @@ class ExcelPage extends Component {
                       dropzoneText={
                         <>
                           <Upload
-                            id='file'
+                            id="file"
                             accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                             name="file"
                             beforeUpload={this.fileHandler}
@@ -1032,7 +998,7 @@ class ExcelPage extends Component {
                             multiple={false}
                             // className={classes2.upload}
                             className={classes3}
-                          // component={Links} to="/showtable"
+                            // component={Links} to="/showtable"
                           >
                             {this.state.btn === "no" ? (
                               <Buttons
@@ -1115,11 +1081,9 @@ class ExcelPage extends Component {
           </div>
         );
       } else {
-
         const handleClose = () => {
           // console.log(this.state.data)
           this.setState({ open: false, data: "NO" });
-
         };
         return <div></div>;
       }
@@ -1141,7 +1105,7 @@ class ExcelPage extends Component {
     //       // array.push(response.data[1].name);
     //       // array.push(response.data[2].name);
     //       }).catch(function (error) {
-    //         console.log("error:", error);     
+    //         console.log("error:", error);
     //         console.log("errosr:", error.response.data);
     //         error.response.status === 400
     //           ? console.log("400")
@@ -1163,8 +1127,6 @@ class ExcelPage extends Component {
     //     }
     //   };
 
-
-
     const { classes } = this.props;
 
     return (
@@ -1174,7 +1136,6 @@ class ExcelPage extends Component {
         {check(this.state.data, this.state.fileList, this.state.name)}
 
         {/* {returnmodal(this.state.data2)} */}
-
       </>
     );
   }
@@ -1194,7 +1155,6 @@ const useStyless = makeStyles((theme) => ({
   },
 }));
 
-
 function TransitionsModal(props) {
   const classes = useStyless();
   const [open, setOpen] = React.useState(false);
@@ -1208,8 +1168,12 @@ function TransitionsModal(props) {
 
   axios({
     method: "get",
-    url: "https://sabertoothdashboard.herokuapp.com/dashboard/me/portfolio",
-    headers: { "Content-Type": "multipart/form-data", "Authorization": `token ${localStorage.getItem("token")}` }
+    url: base_url + "dashboard/me/portfolio",
+    // url: "https://sabertoothdashboard.herokuapp.com/dashboard/me/portfolio",
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `token ${localStorage.getItem("token")}`,
+    },
   })
     .then(function (response) {
       var arr = [];
@@ -1219,29 +1183,22 @@ function TransitionsModal(props) {
       // arr.push(response.data[2].name);
 
       for (var i = 0; i < response.data.length; i++) {
-        arr.push(response.data[i].name)
+        arr.push(response.data[i].name);
       }
 
       setArray(arr);
-
-    }).catch(function (error) {
-
+    })
+    .catch(function (error) {
       console.log(error);
     });
-
-
-
 
   const handleOpen3 = () => {
     setOpen3(true);
   };
 
-
-
   const handleOpen = () => {
     setOpen(true);
   };
-
 
   const handleClose = () => {
     setOpen(false);
@@ -1259,8 +1216,6 @@ function TransitionsModal(props) {
     setOpen4(false);
   };
 
-
-
   const returnstatement = (name) => {
     if (name) {
       var ans = "This table have ";
@@ -1274,30 +1229,26 @@ function TransitionsModal(props) {
     }
   };
 
-
-
   const handleEntailmentRequest = (e) => {
     window.location.reload(false);
     // console.log("aasdfad");
   };
 
   function deletestocks() {
-
-
     delet.map((item) => {
-
       var data = new FormData();
-      data.append('portfolio_name', item);
-      data.append('action', 'delete');
+      data.append("portfolio_name", item);
+      data.append("action", "delete");
 
       var config = {
-        method: 'post',
-        url: 'https://sabertoothdashboard.herokuapp.com/dashboard/my_stocks/',
+        method: "post",
+        url: base_url + "dashboard/my_stocks/",
+        // url: 'https://sabertoothdashboard.herokuapp.com/dashboard/my_stocks/',
         headers: {
           "Content-Type": "multipart/form-data",
-          "Authorization": `token ${localStorage.getItem("token")}`
+          Authorization: `token ${localStorage.getItem("token")}`,
         },
-        data: data
+        data: data,
       };
 
       axios(config)
@@ -1307,14 +1258,9 @@ function TransitionsModal(props) {
         .catch(function (error) {
           console.log(error);
         });
-
-
-
     });
     setOpen4(true);
-
   }
-
 
   // const [isOpen, setIsOpen] = useState(false);
   // function toggleModal() {
@@ -1353,11 +1299,13 @@ function TransitionsModal(props) {
         <Fade lg={3} sm={6} xs={12} in={open}>
           <div
             className={classes.paper}
-            style={{
-              // position: "fixed",
-              // width: "30%",
-              // height: "20%",
-            }}
+            style={
+              {
+                // position: "fixed",
+                // width: "30%",
+                // height: "20%",
+              }
+            }
           >
             <p id="transition-modal-description" style={{ width: "300px" }}>
               {/* This table have {props.rows.length} rows and {props.errors.length}{" "}
@@ -1373,20 +1321,20 @@ function TransitionsModal(props) {
                     // handleClose();
                     if (props.portfolio) {
                       // console.log(props.resp);
-                      if (props.resp === "You already have 3 active portfolios. Inorder to create new please delete previous portfolio.") {
-
+                      if (
+                        props.resp ===
+                        "You already have 3 active portfolios. Inorder to create new please delete previous portfolio."
+                      ) {
                         // props.parentCallback2("DELETE");
                         // handleClose();
                         setOpen2(true);
                         // handleClose();
                         // console.log("here",array);
-                      }
-                      else {
+                      } else {
                         props.parentCallback("YES");
                         handleClose();
                       }
-                    }
-                    else {
+                    } else {
                       handleClose();
                     }
                   }}
@@ -1403,7 +1351,12 @@ function TransitionsModal(props) {
                     marginLeft: "30%",
                   }}
                 >
-                  {props.portfolio ? props.resp === "You already have 3 active portfolios. Inorder to create new please delete previous portfolio." ? "DELETE SOME" : "OK" : "SUBMIT AGAIN"}
+                  {props.portfolio
+                    ? props.resp ===
+                      "You already have 3 active portfolios. Inorder to create new please delete previous portfolio."
+                      ? "DELETE SOME"
+                      : "OK"
+                    : "SUBMIT AGAIN"}
                 </Buttons>
                 <Modal
                   aria-labelledby="transition-modal-title"
@@ -1420,32 +1373,44 @@ function TransitionsModal(props) {
                   <Fade lg={3} sm={6} xs={12} in={open2}>
                     <div
                       className={classes.paper}
-                      style={{
-                        // position: "fixed",
-
-                        // width: "30%",
-                        // height: "25%",
-                      }}
+                      style={
+                        {
+                          // position: "fixed",
+                          // width: "30%",
+                          // height: "25%",
+                        }
+                      }
                     >
                       {/* <h2 id="transition-modal-title">DELETE</h2> */}
-                      <p id="transition-modal-description" style={{ width:"300px" }}>
+                      <p
+                        id="transition-modal-description"
+                        style={{ width: "300px" }}
+                      >
                         DELETE PORTFOLIO NAME
                       </p>
                       <div style={{ marginTop: 20 }}>
                         <div className="actions">
                           <ul>
                             {array.map((stock, index) => {
-                              return <li><input type="checkbox" id={stock} onChange={() => { delet.push(stock); setDelet(delet); }} ></input> <span>{stock}</span></li>
+                              return (
+                                <li>
+                                  <input
+                                    type="checkbox"
+                                    id={stock}
+                                    onChange={() => {
+                                      delet.push(stock);
+                                      setDelet(delet);
+                                    }}
+                                  ></input>{" "}
+                                  <span>{stock}</span>
+                                </li>
+                              );
                             })}
                             {/* <li><input type="checkbox" id={array[0]} onChange={() => { delet.push(array[0]); setDelet(delet); }} ></input> <span>{array[0]}</span></li> */}
                             {/* <li><input type="checkbox" id={array[1]} onChange={() => { delet.push(array[1]); setDelet(delet); }} ></input> <span>{array[1]}</span></li> */}
                             {/* <li><input type="checkbox" id={array[2]} onChange={() => { delet.push(array[2]); setDelet(delet); }} ></input> <span>{array[2]}</span></li> */}
-
                           </ul>
                           {/* <ForDeletestocks  array={array} /> */}
-
-
-
                         </div>
                         <Buttons
                           type="button"
@@ -1491,18 +1456,29 @@ function TransitionsModal(props) {
                 <Fade lg={3} sm={6} xs={12} in={open3}>
                   <div
                     className={classes.paper}
-                    style={{
-                      // position: "fixed",
-
-                      // width: "30%",
-                      // height: "25%",
-                    }}
+                    style={
+                      {
+                        // position: "fixed",
+                        // width: "30%",
+                        // height: "25%",
+                      }
+                    }
                   >
-                    <h2 id="transition-modal-title" style={{ marginTop:"40px"}}>Alert</h2>
+                    <h2
+                      id="transition-modal-title"
+                      style={{ marginTop: "40px" }}
+                    >
+                      Alert
+                    </h2>
 
-                    <p id="transition-modal-description" style={{ width: "300px" }}>
+                    <p
+                      id="transition-modal-description"
+                      style={{ width: "300px" }}
+                    >
                       Are you sure want to delete these Portfolio name
-                      {array.map((arr) => { <p>{arr}</p> })}
+                      {array.map((arr) => {
+                        <p>{arr}</p>;
+                      })}
                     </p>
                     <div style={{ marginTop: 8 }}>
                       <div className="actions">
@@ -1526,7 +1502,8 @@ function TransitionsModal(props) {
                           }}
                         >
                           DELETE
-                        </Buttons>&nbsp;&nbsp;
+                        </Buttons>
+                        &nbsp;&nbsp;
                         {/* <span> &nbsp;&nbsp; </span> */}
                         <Buttons
                           onClick={(e) => {
@@ -1562,15 +1539,29 @@ function TransitionsModal(props) {
                           <Fade lg={3} sm={6} xs={12} in={open4}>
                             <div
                               className={classes.paper}
-                              style={{
-                                // position: "fixed",
-
-                                // width: "30%",
-                                // height: "25%",
-                              }}
+                              style={
+                                {
+                                  // position: "fixed",
+                                  // width: "30%",
+                                  // height: "25%",
+                                }
+                              }
                             >
-                              <h2 id="transition-modal-title" style={{ marginTop:"55px",textAlign:"center"}}>Success</h2>
-                              <p id="transition-modal-description" style={{ width: "300px",textAlign:"center" }}>Completed !</p>
+                              <h2
+                                id="transition-modal-title"
+                                style={{
+                                  marginTop: "55px",
+                                  textAlign: "center",
+                                }}
+                              >
+                                Success
+                              </h2>
+                              <p
+                                id="transition-modal-description"
+                                style={{ width: "300px", textAlign: "center" }}
+                              >
+                                Completed !
+                              </p>
                               <div style={{ marginTop: 10 }}>
                                 <div className="actions">
                                   <Buttons
@@ -1594,7 +1585,6 @@ function TransitionsModal(props) {
                                   >
                                     OK
                                   </Buttons>
-
                                 </div>
                               </div>
                             </div>
@@ -1605,8 +1595,6 @@ function TransitionsModal(props) {
                   </div>
                 </Fade>
               </Modal>
-
-
             </div>
           </div>
         </Fade>
@@ -1722,13 +1710,7 @@ function TransitionsModal(props) {
 //     </div>
 //   );
 
-
-
 // }
-
-
-
-
 
 function TableSubmitModal(props) {
   const classes = useStyless();
@@ -1780,7 +1762,8 @@ function TableSubmitModal(props) {
           }}
         >
           Cancel
-        </Buttons>&nbsp;&nbsp;
+        </Buttons>
+        &nbsp;&nbsp;
         {/* <span> &nbsp;&nbsp; </span> */}
         <Buttons
           type="button"
@@ -1821,20 +1804,24 @@ function TableSubmitModal(props) {
         <Fade lg={3} sm={6} xs={12} in={open}>
           <div
             className={classes.paper}
-            style={{
-              // position: "fixed",
-
-              // width: "30%",
-              // height: "25%",
-            }}
+            style={
+              {
+                // position: "fixed",
+                // width: "30%",
+                // height: "25%",
+              }
+            }
           >
             <h2 id="transition-modal-title">Alert</h2>
-            <p id="transition-modal-description" style={{ width:"300px" }}>
+            <p id="transition-modal-description" style={{ width: "300px" }}>
               Ignore The Errors And Submit?
             </p>
             <div style={{ marginTop: 20 }}>
               <div className="actions">
-                <AlertSubmitModal file={props.file} portfolio_name={props.portfolio_name} />
+                <AlertSubmitModal
+                  file={props.file}
+                  portfolio_name={props.portfolio_name}
+                />
               </div>
             </div>
           </div>
@@ -1856,19 +1843,23 @@ function AlertSubmitModal(props) {
     // console.log(props.file[0].originFileObj);
     var bodyFormData = new FormData();
 
-    bodyFormData.append('file', props.file[0].originFileObj);
-    bodyFormData.append('portfolio_name', props.portfolio_name);
+    bodyFormData.append("file", props.file[0].originFileObj);
+    bodyFormData.append("portfolio_name", props.portfolio_name);
     // console.log(props.portfolio_name);
     axios({
       method: "post",
-      url: "https://sabertoothdashboard.herokuapp.com/dashboard/upload/",
+      url: base_url + "dashboard/upload/",
+      // url: "https://sabertoothdashboard.herokuapp.com/dashboard/upload/",
       data: bodyFormData,
-      headers: { "Content-Type": "multipart/form-data", "Authorization": `token ${localStorage.getItem("token")}` }
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `token ${localStorage.getItem("token")}`,
+      },
     })
       .then(function (response) {
         // console.log(response.data);
-      }).catch(function (error) {
-
+      })
+      .catch(function (error) {
         console.log("error:", error);
         // console.log("errosr:", error.response.data);
         // error.response.status === 400
@@ -1879,7 +1870,6 @@ function AlertSubmitModal(props) {
       });
     setOpen(true);
   };
-
 
   const handleClose = () => {
     setOpen(false);
@@ -1914,7 +1904,8 @@ function AlertSubmitModal(props) {
         }}
       >
         Re Upload
-      </Buttons>&nbsp;&nbsp;
+      </Buttons>
+      &nbsp;&nbsp;
       {/* <span> &nbsp;&nbsp; </span> */}
       <Buttons
         onClick={posts}
@@ -1948,15 +1939,26 @@ function AlertSubmitModal(props) {
         <Fade lg={3} sm={6} xs={12} in={open}>
           <div
             className={classes.paper}
-            style={{
-              // position: "fixed",
-
-              // width: "30%",
-              // height: "25%",
-            }}
+            style={
+              {
+                // position: "fixed",
+                // width: "30%",
+                // height: "25%",
+              }
+            }
           >
-            <h2 id="transition-modal-title" style={{ marginTop:"55px",textAlign:"center"}}>Success</h2>
-            <p id="transition-modal-description" style={{ width: "300px",textAlign:"center" }}>Completed !</p>
+            <h2
+              id="transition-modal-title"
+              style={{ marginTop: "55px", textAlign: "center" }}
+            >
+              Success
+            </h2>
+            <p
+              id="transition-modal-description"
+              style={{ width: "300px", textAlign: "center" }}
+            >
+              Completed !
+            </p>
             <div style={{ marginTop: 10 }}>
               <div className="actions">
                 <Buttons
