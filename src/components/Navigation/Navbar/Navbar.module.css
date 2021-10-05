@@ -1,0 +1,23 @@
+.navbarColor {
+  background-color: #141629 !important;
+  margin-bottom: 30px;
+}
+.userIcon {
+  color: #37ba6c;
+  font-size: 45px !important;
+}
+.userName {
+  color: #141629 !important;
+  /* font-size: 16px;
+  font-weight: 500; */
+}
+.email {
+  font-size: 30;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: rgb(148, 149, 157);
+  vertical-align: middle;
+}
+.iconColor {
+  color: #94959d;
+}
